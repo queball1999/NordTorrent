@@ -49,8 +49,25 @@ Experience an unparalleled level of privacy and security in your torrenting acti
    docker-compose up -d
    ```
     Ensure you are running this command in the same directory as the docker-compose.yaml
+
+5. **Verify NordLynx access:**
+   Before doing anything further with NordTorrent, you should verify that the connection is working properly.
+   We will need either the container ID's or names, so run the following command to show all running containers:
+      ```bash
+      docker ps
+      ```
+   Find NordLynx and QbitTorrent-Nord, notate their names or ID's. Next, run the following command on each:
+   ```bash
+   docker exec [id_or_name] curl https://ifconfig.me
+   ```
+   This would look like the following:
+   ```bash
+   sudo docker exec NordLynx curl https://ifconfig.me
+   sudo docker exec QbitTorrent-Nord curl https://ifconfig.me
+   ```
+   If we see an IP address returned that is not your ISP provided one, you are good to go! If you see your ISP provided IP address, try running ```docker-compose up``` (without the -d) to show the output during startup.
   
-6. **Access qBittorrent:**
+7. **Access qBittorrent:**
    Open your web browser and go to localhost:8089 to start managing your torrents securely. The default credentials are ```admin \ adminadmin```
 
 ## 📖 Configuration
