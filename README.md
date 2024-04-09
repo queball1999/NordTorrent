@@ -62,8 +62,8 @@ Experience an unparalleled level of privacy and security in your torrenting acti
    ```
    This would look like the following:
    ```bash
-   sudo docker exec NordLynx curl https://ifconfig.me
-   sudo docker exec QbitTorrent-Nord curl https://ifconfig.me
+   docker exec NordLynx curl https://ifconfig.me
+   docker exec QbitTorrent-Nord curl https://ifconfig.me
    ```
    If we see an IP address returned that is not your ISP provided one, you are good to go! If you see your ISP provided IP address, try running ```docker-compose up``` (without the -d) to show the output during startup.
   
