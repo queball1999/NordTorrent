@@ -1,0 +1,56 @@
+version: "3.3"
+services:
+  nordvpn:
+    container_name: NordLynx
+    image: ghcr.io/bubuntux/nordlynx
+    security_opt:
+      - no-new-privileges:true
+    cap_add:
+      - NET_ADMIN #required
+    ports:
+      - "8089:8089" # QbitTorrent UI
+      - "9092:9091" # Transmission
+      - "51413:51413" # Transmision
+      - "51413:51413/udp" # Transmision
+      - "51420:51420" # QbitTorrent
+      - "51420:51420/udp" # QbitTorrent
+    sysctls:
+      - net.ipv6.conf.all.disable_ipv6=1 # Recommended if using ipv4 only
+    environment:
+      - PRIVATE_KEY=[MY_PRIVATE_KEY] #required
+      - ALLOWED_IPS=0.0.0.0/1,128.0.0.0/1
+      - NET_LOCAL=10.0.0.0/8,172.16.0.0/12,192.168.4.0/24
+      - QUERY=filters\[country_id\]=228&filters\[servers_groups\]\[identifier\]=legacy_p2p # 228 is United States
+      - "POST_UP=ip -4 route add $$(wg | awk -F'[: ]' '/endpoint/ {print $$5}') via $$(ip route | awk '/default/ {print $$3}')"
+      - "PRE_DOWN=ip -4 route del $$(route -n | awk '/255.255.255.255/ {print $$1}') via $$(ip route | awk '/default/ {print $$3}')"
+    restart: always
+  qbittorrent:
+    image: linuxserver/qbittorrent:4.5.2
+    network_mode: "service:nordvpn"
+    container_name: QbitTorrent-Nord
+    depends_on:
+      - nordvpn
+    environment:
+      - WEBUI_PORT=8089
+      - PUID=1000
+      - PGID=1000
+      - TZ=America/Arizona
+    volumes:
+      - "./config/qBittorrent-VPN:/config"
+      - "./downloads:/downloads"
+    restart: always
+  transmission:
+    image: ghcr.io/linuxserver/transmission:4.0.2
+    network_mode: "service:nordvpn"
+    container_name: Transmission-Nord
+    depends_on:
+      - nordvpn
+    environment:
+      - PUID=1000
+      - PGID=10000
+      - TZ=America/Arizona
+    volumes:
+      - "./config:/config"
+      - "./downloads:/downloads"
+      - "./watch:/watch"
+    restart: always
