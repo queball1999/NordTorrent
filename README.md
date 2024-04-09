@@ -113,7 +113,7 @@ Experience an unparalleled level of privacy and security in your torrenting acti
 Contributions are welcome! Whether it's reporting issues, submitting improvements, or adding features, feel free to fork the repository and submit pull requests.
 
 ## 📝 License
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the GPL-3.0 license - see the LICENSE file for details.
 
 ## 🙏 Acknowledgments
 Thanks to the creators of qBittorrent and the developers behind the NordVPN Docker integration for making this project possible.
